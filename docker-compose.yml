@@ -6,7 +6,7 @@ services:
     container_name: device-evaluation-management-app
     restart: unless-stopped
     ports:
-      - '3000:3000'
+      - '3737:3737'
     environment:
       - MONGO_URI=mongodb://admin:password123@mongodb:27018/device-evaluation-management?authSource=admin
     depends_on:
