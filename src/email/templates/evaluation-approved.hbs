@@ -1,0 +1,26 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <title>Avaliação Aprovada</title>
+</head>
+<body>
+<h2>Avaliação Aprovada! 🎉</h2>
+
+<p>Sua submissão <strong>{{trackingCode}}</strong> foi aprovada!</p>
+
+<p><strong>Dispositivo:</strong> {{deviceName}}</p>
+
+<h3>Valores Oferecidos:</h3>
+{{#each finalPrices}}
+    <p>{{saleMode}} - {{paymentTiming}}: <strong>R$ {{finalPrice}}</strong></p>
+{{/each}}
+
+<p><strong>Válido até:</strong> {{validUntil}}</p>
+
+<p>Entre em contato conosco para prosseguir com a transação.</p>
+
+<p>Atenciosamente,<br>
+    Equipe de Avaliação</p>
+</body>
+</html>
