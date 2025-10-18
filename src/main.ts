@@ -14,6 +14,7 @@ async function bootstrap() {
     configService.get<string>('FRONTEND_URL'),
     'http://localhost:3000',
     'http://localhost:3001',
+    'https://device-evaluation.domusduo.space',
   ].filter((v): v is string => typeof v === 'string' && v.length > 0);
 
   app.enableCors({
