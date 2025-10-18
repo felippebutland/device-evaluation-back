@@ -1,12 +1,28 @@
 version: '3.8'
 
 services:
+  app:
+    build: .
+    container_name: device-evaluation-management-app
+    restart: unless-stopped
+    ports:
+      - '3000:3000'
+    environment:
+      - MONGO_URI=mongodb://admin:password123@mongodb:27018/device-evaluation-management?authSource=admin
+    depends_on:
+      - mongodb
+    env_file:
+      - .env
+    networks:
+      - device-evaluation-management-network
+
   mongodb:
     image: mongo:7.0
     container_name: device-evaluation-management-mongodb
     restart: unless-stopped
+    command: mongod --port 27018
     ports:
-      - "27017:27017"
+      - "27018:27018"
     environment:
       MONGO_INITDB_ROOT_USERNAME: ${MONGO_ROOT_USERNAME:-admin}
       MONGO_INITDB_ROOT_PASSWORD: ${MONGO_ROOT_PASSWORD:-password123}
