@@ -3,6 +3,8 @@ import {
     IsNotEmpty,
     IsNumber,
     IsOptional,
+    IsIn,
+    IsBoolean,
     Min,
     Max,
     MaxLength
@@ -28,6 +30,14 @@ export class CreateDamageTypeDto {
     @IsNumber()
     @Min(0)
     defaultDiscountAmount?: number;
+
+    @IsOptional()
+    @IsIn(['add', 'subtract'])
+    operation?: 'add' | 'subtract' = 'subtract';
+
+    @IsOptional()
+    @IsBoolean()
+    blocksSubmission?: boolean = false;
 
     @IsOptional()
     @IsNumber()

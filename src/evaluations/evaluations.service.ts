@@ -230,19 +230,23 @@ export class EvaluationsService {
 
     // Calcular descontos por avarias
     for (const damage of damages) {
+      const damageType = await this.damageTypesService.findById(damage.damageTypeId);
+      const sign = damageType.operation === 'add' ? -1 : 1;
+
+      let amount = 0;
       if (damage.discountAmount) {
-        totalDamageDeduction += damage.discountAmount;
+        amount = damage.discountAmount;
       } else if (damage.discountPercentage) {
-        totalDamageDeduction += (device.basePrice * damage.discountPercentage) / 100;
+        amount = (device.basePrice * damage.discountPercentage) / 100;
       } else {
-        // Usar valor padrão do tipo de avaria
-        const damageType = await this.damageTypesService.findById(damage.damageTypeId);
         if (damageType.defaultDiscountAmount) {
-          totalDamageDeduction += damageType.defaultDiscountAmount;
+          amount = damageType.defaultDiscountAmount;
         } else {
-          totalDamageDeduction += (device.basePrice * damageType.defaultDiscountPercentage) / 100;
+          amount = (device.basePrice * damageType.defaultDiscountPercentage) / 100;
         }
       }
+
+      totalDamageDeduction += sign * amount;
     }
 
     const adjustedPrice = Math.max(0, device.basePrice - totalDamageDeduction);

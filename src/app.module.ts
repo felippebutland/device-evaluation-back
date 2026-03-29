@@ -10,6 +10,7 @@ import { PricingPoliciesModule } from './pricing-policies/pricing-policies.modul
 import { DeviceSubmissionsModule } from './device-submissions/device-submissions.module';
 import { EvaluationsModule } from './evaluations/evaluations.module';
 import { EmailModule } from './email/email.module';
+import { ConservationStatesModule } from './conservation-states/conservation-states.module';
 import { JwtAuthGuard } from './auth/guards/jwt-auth.guard';
 import { RolesGuard } from './auth/guards/roles.guard';
 import {validate} from "./env.validation";
@@ -38,6 +39,7 @@ import {validate} from "./env.validation";
     DeviceSubmissionsModule,
     EvaluationsModule,
     EmailModule,
+    ConservationStatesModule,
   ],
   providers: [
     {

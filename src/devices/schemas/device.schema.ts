@@ -61,12 +61,30 @@ export class Device {
         type: [{
             damageType: { type: Types.ObjectId, ref: 'DamageType', required: true },
             defaultDiscountPercentage: { type: Number, required: true, min: 0 },
+            operation: { type: String, enum: ['add', 'subtract'], default: 'subtract' },
+            blocksSubmission: { type: Boolean, default: false },
         }],
         default: [],
     })
     applicableDamageTypes?: Array<{
         damageType: Types.ObjectId;
         defaultDiscountPercentage: number;
+        operation: 'add' | 'subtract';
+        blocksSubmission: boolean;
+    }>;
+
+    @Prop({
+        type: [{
+            conservationState: { type: Types.ObjectId, ref: 'ConservationState', required: true },
+            value: { type: Number, required: true, min: 0 },
+            operation: { type: String, enum: ['add', 'subtract'], default: 'subtract' },
+        }],
+        default: [],
+    })
+    applicableConservationStates?: Array<{
+        conservationState: Types.ObjectId;
+        value: number;
+        operation: 'add' | 'subtract';
     }>;
 }
 

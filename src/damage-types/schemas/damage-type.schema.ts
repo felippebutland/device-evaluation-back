@@ -17,6 +17,12 @@ export class DamageType {
     @Prop({ min: 0 })
     defaultDiscountAmount?: number;
 
+    @Prop({ default: 'subtract', enum: ['add', 'subtract'] })
+    operation!: 'add' | 'subtract';
+
+    @Prop({ default: false })
+    blocksSubmission!: boolean;
+
     @Prop({ default: true })
     isActive!: boolean;
 

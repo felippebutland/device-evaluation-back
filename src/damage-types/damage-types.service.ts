@@ -105,18 +105,21 @@ export class DamageTypesService {
   async calculateDamageDeduction(damageTypeId: string, deviceBasePrice: number) {
     const damageType = await this.findById(damageTypeId);
 
-    let deduction = 0;
+    let amount = 0;
 
     if (damageType.defaultDiscountAmount) {
-      deduction = damageType.defaultDiscountAmount;
+      amount = damageType.defaultDiscountAmount;
     } else {
-      deduction = (deviceBasePrice * damageType.defaultDiscountPercentage) / 100;
+      amount = (deviceBasePrice * damageType.defaultDiscountPercentage) / 100;
     }
+
+    const deduction = damageType.operation === 'add' ? -amount : amount;
 
     return {
       damageType: damageType.name,
+      operation: damageType.operation,
       deduction,
-      percentage: (deduction / deviceBasePrice) * 100,
+      percentage: (amount / deviceBasePrice) * 100,
     };
   }
 

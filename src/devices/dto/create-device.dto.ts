@@ -1,53 +1,81 @@
+// create-device.dto.ts
 import {
     IsString,
     IsNotEmpty,
     IsNumber,
     IsArray,
     IsOptional,
+    IsIn,
     Min,
-    MaxLength,
-    ArrayMaxSize,
-    IsUrl,
     ValidateNested,
-    IsEnum, IsBoolean
+    IsEnum,
+    IsBoolean,
 } from 'class-validator';
 import { Type } from 'class-transformer';
-import {PaymentTiming} from "../../common/enums/payment-timing.enum";
-import {SaleMode} from "../../common/enums/sale-mode.enum";
+import { PaymentTiming } from '../../common/enums/payment-timing.enum';
+import { SaleMode } from '../../common/enums/sale-mode.enum';
 
-class SpecificPricingPolicyDto {
+export class SpecificPricingPolicyDto {
+    @IsOptional()
     @IsEnum(SaleMode)
     saleMode?: SaleMode;
 
     @IsEnum(PaymentTiming)
+    @IsOptional()
     paymentTiming?: PaymentTiming;
 
+    @Type(() => Number)
     @IsNumber()
     @Min(0)
+    @IsOptional()
     discountAmount?: number;
 }
 
-class ApplicableDamageTypeDto {
+export class ApplicableDamageTypeDto {
     @IsString()
     id!: string;
 
+    @Type(() => Number)
     @IsNumber()
     @Min(0)
     defaultDiscountPercentage!: number;
+
+    @IsOptional()
+    @IsIn(['add', 'subtract'])
+    operation?: 'add' | 'subtract' = 'subtract';
+
+    @IsOptional()
+    @IsBoolean()
+    blocksSubmission?: boolean = false;
+}
+
+export class ApplicableConservationStateDto {
+    @IsString()
+    id!: string;
+
+    @Type(() => Number)
+    @IsNumber()
+    @Min(0)
+    value!: number;
+
+    @IsOptional()
+    @IsIn(['add', 'subtract'])
+    operation?: 'add' | 'subtract' = 'subtract';
 }
 
 export class DeviceVariantDto {
     @IsString()
     @IsNotEmpty()
-    model!: string; // "Pro Max"
+    model!: string;
 
     @IsString()
     @IsNotEmpty()
-    memory!: string; // "128GB"
+    memory!: string;
 
+    @Type(() => Number)
     @IsNumber()
     @Min(0)
-    price!: number; // 5000
+    price!: number;
 
     @IsOptional()
     @IsString()
@@ -61,23 +89,15 @@ export class DeviceVariantDto {
 export class CreateDeviceDto {
     @IsString()
     @IsNotEmpty()
-    name!: string; // "iPhone 15"
+    name!: string;
 
     @IsString()
     @IsNotEmpty()
-    brand!: string; // "Apple"
+    brand!: string;
 
     @IsOptional()
     @IsString()
     description?: string;
-
-    @IsOptional()
-    @IsArray()
-    specifications?: string[];
-
-    @IsOptional()
-    @IsArray()
-    images?: string[];
 
     @IsOptional()
     @IsBoolean()
@@ -90,13 +110,19 @@ export class CreateDeviceDto {
 
     @IsOptional()
     @IsArray()
-    specificPricingPolicies?: Array<{
-        saleMode: SaleMode;
-        paymentTiming: PaymentTiming;
-        discountAmount: number;
-    }>;
+    @ValidateNested({ each: true })
+    @Type(() => SpecificPricingPolicyDto)
+    specificPricingPolicies?: SpecificPricingPolicyDto[];
 
     @IsOptional()
     @IsArray()
-    applicableDamageTypes?: Array<any>;
+    @ValidateNested({ each: true })
+    @Type(() => ApplicableDamageTypeDto)
+    applicableDamageTypes?: ApplicableDamageTypeDto[];
+
+    @IsOptional()
+    @IsArray()
+    @ValidateNested({ each: true })
+    @Type(() => ApplicableConservationStateDto)
+    applicableConservationStates?: ApplicableConservationStateDto[];
 }

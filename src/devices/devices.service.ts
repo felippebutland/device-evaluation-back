@@ -35,6 +35,16 @@ export class DevicesService {
             payload.applicableDamageTypes = createDeviceDto.applicableDamageTypes.map((item: any) => ({
                 damageType: item.id,
                 defaultDiscountPercentage: item.defaultDiscountPercentage,
+                operation: item.operation ?? 'subtract',
+                blocksSubmission: item.blocksSubmission ?? false,
+            }));
+        }
+
+        if (createDeviceDto.applicableConservationStates) {
+            payload.applicableConservationStates = createDeviceDto.applicableConservationStates.map((item: any) => ({
+                conservationState: item.id,
+                value: item.value,
+                operation: item.operation ?? 'subtract',
             }));
         }
 
@@ -84,6 +94,7 @@ export class DevicesService {
             this.deviceModel
                 .find(query)
                 .populate({path: 'applicableDamageTypes.damageType', select: 'name description'})
+                .populate({path: 'applicableConservationStates.conservationState', select: 'name operation'})
                 .sort({name: 1})
                 .skip(skip)
                 .limit(limit)
@@ -110,6 +121,7 @@ export class DevicesService {
         const device = await this.deviceModel
             .findById(id)
             .populate({path: 'applicableDamageTypes.damageType', select: 'name description'})
+            .populate({path: 'applicableConservationStates.conservationState', select: 'name operation'})
             .exec();
 
         if (!device) {
@@ -123,6 +135,7 @@ export class DevicesService {
         const device = await this.deviceModel
             .findOne({_id: id, isActive: true})
             .populate({path: 'applicableDamageTypes.damageType', select: 'name description'})
+            .populate({path: 'applicableConservationStates.conservationState', select: 'name operation'})
             .exec();
 
         if (!device) {
@@ -153,6 +166,16 @@ export class DevicesService {
         updatePayload.applicableDamageTypes = updateDeviceDto.applicableDamageTypes.map((item: any) => ({
           damageType: item.id,
           defaultDiscountPercentage: item.defaultDiscountPercentage,
+          operation: item.operation ?? 'subtract',
+          blocksSubmission: item.blocksSubmission ?? false,
+        }));
+      }
+
+      if (updateDeviceDto.applicableConservationStates) {
+        updatePayload.applicableConservationStates = updateDeviceDto.applicableConservationStates.map((item: any) => ({
+          conservationState: item.id,
+          value: item.value,
+          operation: item.operation ?? 'subtract',
         }));
       }
 
