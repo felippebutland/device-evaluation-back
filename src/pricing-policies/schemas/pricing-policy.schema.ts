@@ -33,7 +33,7 @@ export class PricingPolicy {
 
 export const PricingPolicySchema = SchemaFactory.createForClass(PricingPolicy);
 
-// Compound index para garantir unicidade por modalidade + timing
-PricingPolicySchema.index({ saleMode: 1, paymentTiming: 1 }, { unique: true });
+// Compound index para garantir unicidade por nome + modalidade + timing
+PricingPolicySchema.index({ name: 1, saleMode: 1, paymentTiming: 1 }, { unique: true });
 PricingPolicySchema.index({ isActive: 1 });
 PricingPolicySchema.index({ priority: 1 });
