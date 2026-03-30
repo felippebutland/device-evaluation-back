@@ -24,11 +24,12 @@ export class PricingPoliciesService {
     const existingPolicy = await this.pricingPolicyModel.findOne({
       saleMode: createDto.saleMode,
       paymentTiming: createDto.paymentTiming,
+      name: createDto.name,
     });
 
     if (existingPolicy) {
       throw new ConflictException(
-        'Já existe política para esta modalidade e prazo de pagamento'
+        'Já existe política com este nome, modalidade e prazo de pagamento'
       );
     }
 
@@ -61,17 +62,18 @@ export class PricingPoliciesService {
   }
 
   async update(id: string, updateDto: UpdatePricingPolicyDto): Promise<PricingPolicyDocument> {
-    // Verificar conflito se mudando saleMode ou paymentTiming
-    if (updateDto.saleMode || updateDto.paymentTiming) {
+    // Verificar conflito se mudando saleMode, paymentTiming ou name
+    if (updateDto.saleMode || updateDto.paymentTiming || updateDto.name) {
       const conflictQuery: any = { _id: { $ne: id } };
 
       if (updateDto.saleMode) conflictQuery.saleMode = updateDto.saleMode;
       if (updateDto.paymentTiming) conflictQuery.paymentTiming = updateDto.paymentTiming;
+      if (updateDto.name) conflictQuery.name = updateDto.name;
 
       const existingPolicy = await this.pricingPolicyModel.findOne(conflictQuery);
       if (existingPolicy) {
         throw new ConflictException(
-          'Já existe política para esta modalidade e prazo de pagamento'
+          'Já existe política com este nome, modalidade e prazo de pagamento'
         );
       }
     }
