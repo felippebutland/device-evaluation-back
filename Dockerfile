@@ -3,7 +3,7 @@ FROM node:20 AS builder
 
 WORKDIR /app
 
-COPY package*.json ./
+COPY package.json ./
 RUN npm install
 
 COPY . .
@@ -14,7 +14,7 @@ FROM node:20-slim
 
 WORKDIR /app
 
-COPY --from=builder /app/package*.json ./
+COPY --from=builder /app/package.json ./
 COPY --from=builder /app/dist ./dist
 
 RUN npm install --omit=dev
